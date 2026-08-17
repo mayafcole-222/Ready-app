@@ -1,0 +1,5 @@
+import test from "node:test"; import assert from "node:assert/strict"; import {buildRecommendations} from "../lib/engine"; import {events,sleep,tasks,weather} from "../lib/demo-data";
+test("recommends workout clothing for exercise without a return-home window",()=>{assert.ok(buildRecommendations(events,tasks,weather,sleep).some(r=>r.id==="gym"))});
+test("does not surface unrelated shopping tasks",()=>{assert.ok(!buildRecommendations(events,tasks,weather,sleep).some(r=>r.title.toLowerCase().includes("detergent")))});
+test("rain and UV create explainable dependencies",()=>{const r=buildRecommendations(events,tasks,weather,sleep);assert.deepEqual(r.find(x=>x.id==="umbrella")?.sources,["Weather","Calendar"]);assert.ok(r.some(x=>x.id==="sunscreen"))});
+test("lower sleep removes optional load but preserves essentials",()=>{const r=buildRecommendations(events,tasks,weather,{durationMinutes:300,baselineMinutes:440});assert.ok(!r.some(x=>x.id==="phone"));assert.ok(r.some(x=>x.priority==="essential"))});
