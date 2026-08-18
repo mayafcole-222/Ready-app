@@ -29,6 +29,17 @@ Build and validate with `npm run lint`, `npm run test:engine`, and `npm run buil
 
 `lib/types.ts` defines product and provider contracts. `lib/providers.ts` selects a provider bundle, while `lib/weather/open-meteo.ts` adapts Open-Meteo into Ready's internal weather model. `lib/engine.ts` is the deterministic dependency engine. `lib/demo-data.ts` holds seeded context and closet items. `components/ready-app.tsx` contains the interactive prototype surfaces. Browser-local preferences and progress use `localStorage`.
 
-Calendar, tasks, sleep, and closet integrations remain mocked. Weather defaults to deterministic demo data; set `NEXT_PUBLIC_READY_WEATHER_MODE=live` in `.env.local` to use Open-Meteo, or set it to `mock` explicitly. Both modes use the centralized New York demo location in `lib/ready-config.ts`. Open-Meteo does not require a credential, and its raw response and WMO codes are normalized by the adapter before they reach ReadyContext, the dependency engine, or UI. Unknown or missing values fail through Ready's existing loading error state rather than silently substituting demo weather. `NEXT_PUBLIC_DEMO_MODE=true` continues to document the wider prototype state. Future credentials go in `.env.local` as server-only values; the commented keys in `.env.example` are names only and contain no secrets. Real OAuth, live calendar/task APIs, uploads, and AI classification are intentionally deferred.
+Tasks, sleep, and closet integrations remain mocked. Weather defaults to deterministic demo data; set `NEXT_PUBLIC_READY_WEATHER_MODE=live` in `.env.local` to use Open-Meteo, or set it to `mock` explicitly. Calendar also defaults to mock mode. To use the optional read-only Google Calendar provider, enable the Google Calendar API, create an OAuth web application, authorize `http://localhost:3000/api/auth/google/callback`, and configure:
+
+```bash
+NEXT_PUBLIC_READY_CALENDAR_MODE=live
+GOOGLE_CLIENT_ID=your-server-side-client-id
+GOOGLE_CLIENT_SECRET=your-server-side-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/auth/google/callback
+```
+
+The Google integration requests only `https://www.googleapis.com/auth/calendar.events.readonly` and reads the primary calendar. OAuth exchange, token refresh, and Google API requests run in server routes. Raw Google events are normalized into `CalendarEvent` facts before Ready's vendor-neutral enrichment layer classifies them. Live authorization or API failures never silently fall back to demo events.
+
+The local prototype stores its Google token session in an encrypted, authenticated, HttpOnly cookie. Tokens are unavailable to client JavaScript, but production should instead use encrypted server-side storage tied to an authenticated user, with key rotation and revocation controls. Both calendar and weather use the centralized New York demo timezone in `lib/ready-config.ts`.
 
 See `docs/PRODUCT.md` and `docs/ARCHITECTURE.md` for more detail.

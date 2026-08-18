@@ -1,4 +1,5 @@
 import type { ReadyContext, ReadyProviders, WeatherLocation } from "./types";
+import { enrichCalendarEvents } from "./calendar/enrich-events";
 
 export async function loadReadyContext(date:string,providers:ReadyProviders,weatherLocation:WeatherLocation):Promise<ReadyContext>{
   const [events,tasks,weather,sleep,closet]=await Promise.all([
@@ -8,5 +9,5 @@ export async function loadReadyContext(date:string,providers:ReadyProviders,weat
     providers.sleep.getSleep(date),
     providers.closet.getItems(),
   ]);
-  return {events,tasks,weather,sleep,closet};
+  return {events:enrichCalendarEvents(events),tasks,weather,sleep,closet};
 }
