@@ -27,8 +27,8 @@ Build and validate with `npm run lint`, `npm run test:engine`, and `npm run buil
 
 ## Architecture
 
-`lib/types.ts` defines product and provider contracts. `lib/providers.ts` contains replaceable mock providers. `lib/engine.ts` is the deterministic dependency engine. `lib/demo-data.ts` holds seeded context and closet items. `components/ready-app.tsx` contains the interactive prototype surfaces. Browser-local preferences and progress use `localStorage`.
+`lib/types.ts` defines product and provider contracts. `lib/providers.ts` selects a provider bundle, while `lib/weather/open-meteo.ts` adapts Open-Meteo into Ready's internal weather model. `lib/engine.ts` is the deterministic dependency engine. `lib/demo-data.ts` holds seeded context and closet items. `components/ready-app.tsx` contains the interactive prototype surfaces. Browser-local preferences and progress use `localStorage`.
 
-All integrations are mocked. `NEXT_PUBLIC_DEMO_MODE=true` documents that state. Future credentials go in `.env.local` as server-only values; the commented keys in `.env.example` are names only and contain no secrets. Real OAuth, live APIs, uploads, and AI classification are intentionally deferred.
+Calendar, tasks, sleep, and closet integrations remain mocked. Weather defaults to deterministic demo data; set `NEXT_PUBLIC_READY_WEATHER_MODE=live` in `.env.local` to use Open-Meteo, or set it to `mock` explicitly. Both modes use the centralized New York demo location in `lib/ready-config.ts`. Open-Meteo does not require a credential, and its raw response and WMO codes are normalized by the adapter before they reach ReadyContext, the dependency engine, or UI. Unknown or missing values fail through Ready's existing loading error state rather than silently substituting demo weather. `NEXT_PUBLIC_DEMO_MODE=true` continues to document the wider prototype state. Future credentials go in `.env.local` as server-only values; the commented keys in `.env.example` are names only and contain no secrets. Real OAuth, live calendar/task APIs, uploads, and AI classification are intentionally deferred.
 
 See `docs/PRODUCT.md` and `docs/ARCHITECTURE.md` for more detail.

@@ -1,10 +1,10 @@
-import type { ReadyContext, ReadyProviders } from "./types";
+import type { ReadyContext, ReadyProviders, WeatherLocation } from "./types";
 
-export async function loadReadyContext(date:string,providers:ReadyProviders):Promise<ReadyContext>{
+export async function loadReadyContext(date:string,providers:ReadyProviders,weatherLocation:WeatherLocation):Promise<ReadyContext>{
   const [events,tasks,weather,sleep,closet]=await Promise.all([
     providers.calendar.getEvents(date),
     providers.tasks.getTasks(date),
-    providers.weather.getWeather(date),
+    providers.weather.getWeather({date,location:weatherLocation}),
     providers.sleep.getSleep(date),
     providers.closet.getItems(),
   ]);
