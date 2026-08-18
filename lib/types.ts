@@ -14,3 +14,6 @@ export interface JourneyStop { id:string; time:string; title:string; location:st
 export interface Reflection { rating:number; wentWell:string[]; improve:string[]; note:string }
 export interface DailyPlan { date:string; events:CalendarEvent[]; recommendations:Recommendation[]; stops:JourneyStop[]; sleep:SleepContext; weather:WeatherContext; pilatesCancelled:boolean }
 export interface CalendarProvider { getEvents(date:string):Promise<CalendarEvent[]> } export interface TaskProvider { getTasks(date:string):Promise<TodoistTask[]> } export interface WeatherProvider { getWeather(date:string):Promise<WeatherContext> } export interface SleepProvider { getSleep(date:string):Promise<SleepContext> } export interface ClosetProvider { getItems():Promise<ClosetItem[]> }
+export interface ReadyProviders { calendar:CalendarProvider; tasks:TaskProvider; weather:WeatherProvider; sleep:SleepProvider; closet:ClosetProvider }
+export interface ReadyContext { events:CalendarEvent[]; tasks:TodoistTask[]; weather:WeatherContext; sleep:SleepContext; closet:ClosetItem[] }
+export type RecommendationUserState = Record<string,{completed:boolean;dismissed:boolean}>;
