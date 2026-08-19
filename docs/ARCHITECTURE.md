@@ -29,3 +29,9 @@ Calendar matching and prep generation are vendor-neutral and deterministic. One 
 `SocialContextProvider` defines the future relationship-memory boundary. A production repository could combine user-authored memory with separately authorized contact, messaging, or email adapters, but provider-specific fields and credentials must remain server-side. Any future AI summarizer must return source references, preserve user corrections, avoid unsupported inference, and keep the UI dependent only on Ready's normalized social models.
 
 `InterestEnrichmentProvider` is a separate boundary for non-personal topic context. V1.5 uses only a tiny `CuratedFactProvider`-style fixture for maintained demo facts. It never labels those facts as current news. The V2 flow is `Person interest → InterestEnrichmentProvider → CuratedFactProvider | WebInterestEnrichmentProvider → sourced facts or updates → Social Prep Engine`. A future web provider must supply a source, URL, and publication date before an item can appear as a recent update; provider-specific responses must not enter UI or relationship memory.
+
+## Journey changes
+
+`ReadyDaySnapshot` is a small, derived comparison model rather than persisted application state. It records only event identity, visible recommendations, errand placement/status, explicitly modeled outfit transitions, and People Prep availability. `buildReadyChanges()` compares two snapshots into typed changes and ranks user-impacting differences before the UI turns them into plain-language copy.
+
+The current calendar cancellation demo captures before and after snapshots with one clock value, then keeps only the latest summary in component memory. The trigger establishes only the known initiating fact; downstream bullets are shown strictly when the corresponding derived state changed. Outfit transitions remain empty until Ready has a real transition model, and weather polling is outside this version.
