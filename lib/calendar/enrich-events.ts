@@ -1,4 +1,5 @@
 import type { CalendarEvent, ReadyEvent, ReadyEventType } from "../types";
+import { classifyReadyEvent } from "../preparation/classify-event";
 
 const MIN_CLASSIFICATION_CONFIDENCE=.75;
 
@@ -17,10 +18,10 @@ function classifyEvent(event:CalendarEvent):Classification{
 }
 
 export function enrichCalendarEvent(event:CalendarEvent):ReadyEvent{
-  const classification=classifyEvent(event);
+  const classification=classifyEvent(event),category=classifyReadyEvent(event);
   const attendanceMode=event.meetingUrl?"virtual":event.location?"in_person":"unknown";
-  if(classification.confidence<MIN_CLASSIFICATION_CONFIDENCE)return {...event,type:"unknown",typeConfidence:classification.confidence,typeReason:classification.reason,attendanceMode};
-  return {...event,type:classification.type,typeConfidence:classification.confidence,typeReason:classification.reason,attendanceMode,...(classification.formality?{formality:classification.formality}:{})};
+  if(classification.confidence<MIN_CLASSIFICATION_CONFIDENCE)return {...event,type:"unknown",typeConfidence:classification.confidence,typeReason:classification.reason,category:category.category,categoryConfidence:category.confidence,categoryReason:category.reason,attendanceMode};
+  return {...event,type:classification.type,typeConfidence:classification.confidence,typeReason:classification.reason,category:category.category,categoryConfidence:category.confidence,categoryReason:category.reason,attendanceMode,...(classification.formality?{formality:classification.formality}:{})};
 }
 
 export function enrichCalendarEvents(events:CalendarEvent[]):ReadyEvent[]{

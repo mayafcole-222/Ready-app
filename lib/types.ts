@@ -3,9 +3,14 @@ export interface UserProfile { id:string; name:string; goals:MorningGoal[]; rout
 export interface RoutineItem { id:string; name:string; timing:"morning"|"night"|"either"|"never"; priority:"must"|"usually"|"nice" }
 export interface CalendarEvent { id:string; title:string; startAt:string; endAt:string; allDay:boolean; location?:string; description?:string; attendees?:string[]; meetingUrl?:string; status:"confirmed"|"tentative"|"cancelled" }
 export type ReadyEventType = "work"|"presentation"|"exercise"|"social"|"home"|"unknown";
-export interface ReadyEvent extends CalendarEvent { type:ReadyEventType; typeConfidence:number; typeReason:string; formality?:number; attendanceMode:"virtual"|"in_person"|"unknown" }
-export interface PreparationTask { id:string; title:string; reason:string }
+export type ReadyEventCategory = "class"|"presentation"|"critique"|"coffee_chat"|"interview"|"meeting"|"virtual_meeting"|"workout"|"social"|"appointment"|"travel"|"study"|"unknown";
+export interface ReadyEvent extends CalendarEvent { type:ReadyEventType; typeConfidence:number; typeReason:string; category:ReadyEventCategory; categoryConfidence:number; categoryReason:string; formality?:number; attendanceMode:"virtual"|"in_person"|"unknown" }
+export type PrepTaskCategory = "bring"|"review"|"do"|"weather"|"timing";
+export interface PreparationTask { id:string; title:string; reason:string; category:PrepTaskCategory; priority:number; generated:boolean }
+export interface CustomPreparationTask extends PreparationTask { generated:false }
 export type PreparationTaskState = Record<string,boolean>;
+export type CustomPreparationTaskState = Record<string,CustomPreparationTask[]>;
+export type HiddenPreparationTaskState = Record<string,boolean>;
 export type TravelMode = "walking"|"driving"|"transit"|"cycling";
 export interface TravelSettings { homeLocation:string; mode:TravelMode; arrivalBufferMinutes:number }
 export interface TravelRequest { origin:string; destination:string; mode:TravelMode; arrivalAt?:string }
