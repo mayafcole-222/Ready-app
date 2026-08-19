@@ -1,7 +1,7 @@
 import type { ReadyEvent, TravelContext, TravelMode, TravelProvider, TravelRequest } from "../types";
 
 export const DEFAULT_TRAVEL_SETTINGS={homeLocation:"",mode:"walking" as TravelMode,arrivalBufferMinutes:10};
-export interface TravelProviderErrorDetails { provider?:"google_routes"; upstreamStatus?:number; googleCode?:number; googleStatus?:string; reason?:string; providerMessage?:string }
+export interface TravelProviderErrorDetails { provider?:"google_routes"|"mapbox"; upstreamStatus?:number; googleCode?:number; googleStatus?:string; reason?:string; providerMessage?:string }
 export class TravelProviderError extends Error{constructor(message:string,public readonly status=502,public readonly details:TravelProviderErrorDetails={}){super(message);this.name="TravelProviderError"}}
 
 export function canCalculateTravel(event:ReadyEvent|undefined,homeLocation:string){return Boolean(event&&!event.allDay&&event.attendanceMode!=="virtual"&&event.location?.trim()&&homeLocation.trim())}

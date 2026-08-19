@@ -38,13 +38,16 @@ GOOGLE_CLIENT_SECRET=your-server-side-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/api/auth/google/callback
 ```
 
-For optional departure guidance, enable **Routes API** in the same or another billed Google Maps Platform project and add a server-only key:
+For optional departure guidance, create a Mapbox access token and add it as a server-only environment variable:
 
 ```bash
-GOOGLE_MAPS_API_KEY=your-restricted-server-side-routes-key
+TRAVEL_PROVIDER=mapbox
+MAPBOX_ACCESS_TOKEN=your-server-side-mapbox-token
 ```
 
-Restrict the key to the Routes API and to the server environments that run Ready. The key is used only by `/api/travel` and is never exposed through a `NEXT_PUBLIC_` variable. Without it, calendar, weather, and preparation continue working and the UI shows “Travel time unavailable.”
+Create the token at **Mapbox Account → Access tokens** (`https://account.mapbox.com/access-tokens/`). Ready uses it only from `/api/travel` to geocode the saved home address and calendar-event location, then request walking, driving, or cycling directions. It is never exposed through a `NEXT_PUBLIC_` variable. Restart the development server after changing `.env.local`. Without it—or for transit—calendar, weather, and preparation continue working and the UI shows “Travel time unavailable.”
+
+The previous Google Routes adapter remains available for fallback testing. Set `TRAVEL_PROVIDER=google` and provide `GOOGLE_MAPS_API_KEY` to select it explicitly.
 
 The Google integration requests only `https://www.googleapis.com/auth/calendar.events.readonly` and reads the primary calendar. OAuth exchange, token refresh, and Google API requests run in server routes. Raw Google events are normalized into `CalendarEvent` facts before Ready's vendor-neutral enrichment layer classifies them. Live authorization or API failures never silently fall back to demo events.
 
