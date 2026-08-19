@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildPreparationTasks, isPreparationTaskComplete, preparationStateKey, upcomingEvents } from "../lib/calendar/preparation";
+import { buildPreparationTasks, isPreparationTaskComplete, nextUpcomingEvent, preparationStateKey, upcomingEvents } from "../lib/calendar/preparation";
 import { enrichCalendarEvent } from "../lib/calendar/enrich-events";
 import { addCustomPreparationTask, hideGeneratedPreparationTask, removeCustomPreparationTask, visibleGeneratedTasks } from "../lib/preparation/custom-tasks";
 import { prioritizePreparationTasks } from "../lib/preparation/prioritize-tasks";
@@ -28,3 +28,4 @@ test("canonical IDs deduplicate and priority controls visible order",()=>{const 
 test("custom tasks are event-scoped, removable, and generated tasks can be hidden",()=>{let custom={};custom=addCustomPreparationTask(custom,"one","Bring samples");assert.equal(custom.one.length,1);assert.equal(custom.two,undefined);custom=removeCustomPreparationTask(custom,"one",custom.one[0].id);assert.equal(custom.one.length,0);const hidden=hideGeneratedPreparationTask({},"one","laptop"),tasks=[{id:"laptop"},{id:"notes"}];assert.deepEqual(visibleGeneratedTasks(tasks,hidden,"one").map(task=>task.id),["notes"]);assert.deepEqual(visibleGeneratedTasks(tasks,hidden,"two").map(task=>task.id),["laptop","notes"])});
 test("completion state persists independently by event and task IDs",()=>{const state={[preparationStateKey("one","laptop")]:true};assert.equal(isPreparationTaskComplete(state,"one","laptop"),true);assert.equal(isPreparationTaskComplete(state,"two","laptop"),false)});
 test("upcoming events are chronological while past events are omitted",()=>{const values=[ready({id:"later",startAt:"2026-08-18T16:00:00Z",endAt:"2026-08-18T17:00:00Z"}),ready({id:"past",startAt:"2026-08-18T10:00:00Z",endAt:"2026-08-18T11:00:00Z"}),ready({id:"next",startAt:"2026-08-18T13:00:00Z",endAt:"2026-08-18T14:00:00Z"})];assert.deepEqual(upcomingEvents(values,new Date("2026-08-18T12:00:00Z")).map(item=>item.id),["next","later"])});
+test("next event prefers a meaningful timed commitment over an active all-day event",()=>{const values=[ready({id:"all-day",title:"Conference",allDay:true,startAt:"2026-08-18",endAt:"2026-08-19"}),ready({id:"timed",title:"Design Crit",startAt:"2026-08-18T15:00:00Z",endAt:"2026-08-18T16:00:00Z"})];assert.equal(nextUpcomingEvent(values,new Date("2026-08-18T12:00:00Z"))?.id,"timed");assert.equal(nextUpcomingEvent([values[0]],new Date("2026-08-18T12:00:00Z"))?.id,"all-day")});

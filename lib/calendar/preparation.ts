@@ -27,3 +27,4 @@ export function buildPreparationTasks(event:ReadyEvent):PreparationTask[]{
 export function preparationStateKey(eventId:string,taskId:string){return `${eventId}::${taskId}`}
 export function isPreparationTaskComplete(state:PreparationTaskState,eventId:string,taskId:string){return Boolean(state[preparationStateKey(eventId,taskId)])}
 export function upcomingEvents(events:ReadyEvent[],now=new Date()):ReadyEvent[]{return events.filter(event=>event.status!=="cancelled"&&(event.allDay?new Date(`${event.endAt}T00:00:00`).getTime()>now.getTime():new Date(event.endAt).getTime()>now.getTime())).sort((a,b)=>a.startAt.localeCompare(b.startAt))}
+export function nextUpcomingEvent(events:ReadyEvent[],now=new Date()):ReadyEvent|undefined{const upcoming=upcomingEvents(events,now);return upcoming.find(event=>!event.allDay)??upcoming[0]}
