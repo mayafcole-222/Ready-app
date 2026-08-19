@@ -17,6 +17,10 @@ export interface TravelRequest { origin:string; destination:string; mode:TravelM
 export interface TravelContext { origin:string; destination:string; mode:TravelMode; durationMinutes:number; distance?:string }
 export interface TravelProvider { getTravelTime(request:TravelRequest):Promise<TravelContext> }
 export interface TodoistTask { id:string; title:string; dueToday:boolean; physicalItem?:string }
+export type ErrandPriority = "low"|"normal"|"high";
+export interface Errand { id:string; title:string; estimatedMinutes:number; location?:string; earliestStart?:string; completeBy?:string; priority:ErrandPriority; status:"open"|"completed" }
+export interface SuggestedErrandSlot { errandId:string; startAt?:string; endAt?:string; beforeEventId?:string; afterEventId?:string; reason:string; status:"scheduled"|"no-fit" }
+export type RejectedErrandSlots = Record<string,string[]>;
 export type WeatherConditionCode = "clear"|"partly-cloudy"|"cloudy"|"light-rain"|"rain"|"snow"|"storms";
 export interface WeatherLocation { name:string; latitude:number; longitude:number; timezone:string }
 export interface WeatherQuery { date:string; location:WeatherLocation }

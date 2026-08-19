@@ -11,3 +11,11 @@ Live Google Calendar access crosses a same-origin server boundary: the client-fa
 Onboarding choices and recommendation progress persist locally. No sensitive values exist in client code. Future OAuth callbacks and credential-backed provider calls must run server-side, with secrets in `.env.local` locally and hosted runtime secrets in deployment settings.
 
 Individual mocks can be replaced without changing screens. A future inference provider can supplement deterministic rules while explanations and user overrides remain authoritative. Local state can move behind a repository interface when production persistence is introduced.
+
+## Errands
+
+Errands are Ready-owned flexible obligations, not calendar events and not Todoist-style recommendation inputs. A task such as “finish presentation slides” can inform the dependency engine; an errand such as “mail a package” reserves a flexible real-world block that Ready attempts to fit around fixed `ReadyEvent[]` commitments.
+
+The deterministic Errand Scheduler builds open daytime windows, protects a ten-minute transition cushion around fixed timed events, applies optional earliest/deadline constraints, and places errands without overlap. Suggested slots are presentation data for Today and Journey and are never written to Google Calendar. Locations are display-only in V1.
+
+Future travel-aware scheduling should narrow or score the scheduler's candidate windows through a vendor-neutral routing boundary using calendar locations, errand locations, business hours, and user travel settings. That extension must not expose provider-specific fields to the scheduler or UI.
