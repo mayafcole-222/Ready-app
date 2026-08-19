@@ -21,6 +21,19 @@ export type ErrandPriority = "low"|"normal"|"high";
 export interface Errand { id:string; title:string; estimatedMinutes:number; location?:string; earliestStart?:string; completeBy?:string; priority:ErrandPriority; status:"open"|"completed" }
 export interface SuggestedErrandSlot { errandId:string; startAt?:string; endAt?:string; beforeEventId?:string; afterEventId?:string; reason:string; status:"scheduled"|"no-fit" }
 export type RejectedErrandSlots = Record<string,string[]>;
+export type RelationshipType = "friend"|"family"|"colleague"|"manager"|"mentor"|"classmate"|"professional"|"date"|"other";
+export interface Person { id:string; name:string; relationship:RelationshipType; customRelationship?:string; interests:string[]; bondTopics:string[]; notes?:string }
+export type SocialContextType = "message"|"email"|"conversation"|"note";
+export interface SocialContextItem { id:string; personId:string; type:SocialContextType; content:string; occurredAt?:string; importance:"normal"|"important" }
+export type SocialPrepCategory = "follow_up"|"shared_interest"|"they_may_ask"|"remember"|"conversation_spark";
+export type SocialPrepSourceKind = "relationship"|"person-interest"|"bond-topic"|"social-context"|"interest-enrichment";
+export interface SocialPrepSource { kind:SocialPrepSourceKind; label:string; ref:string; url?:string; publishedAt?:string }
+export interface SocialPrepBullet { id:string; text:string; category:SocialPrepCategory; sources:SocialPrepSource[] }
+export interface PeoplePrepResult { person:Person; event:ReadyEvent; bullets:SocialPrepBullet[] }
+export type SocialPrepDismissals = Record<string,boolean>;
+export interface SocialContextProvider { getPeople():Promise<Person[]>; getContext(personIds:string[]):Promise<SocialContextItem[]> }
+export interface InterestEnrichment { id:string; topic:string; kind:"fact"|"recent-update"; text:string; sourceLabel?:string; sourceUrl?:string; publishedAt?:string }
+export interface InterestEnrichmentProvider { getEnrichments(topics:string[]):Promise<InterestEnrichment[]> }
 export type WeatherConditionCode = "clear"|"partly-cloudy"|"cloudy"|"light-rain"|"rain"|"snow"|"storms";
 export interface WeatherLocation { name:string; latitude:number; longitude:number; timezone:string }
 export interface WeatherQuery { date:string; location:WeatherLocation }
