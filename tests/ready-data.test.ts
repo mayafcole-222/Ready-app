@@ -31,10 +31,13 @@ test("loads all five providers into one normalized Ready context",async()=>{
   assert.ok(buildRecommendations(context.events,context.tasks,context.weather,context.sleep).some(r=>r.id==="sample"));
 });
 
-test("rejects when a provider fails so the UI can show its error state",async()=>{
+test("keeps calendar preparation available when weather fails",async()=>{
   const {providers}=providerFixture();
   providers.weather.getWeather=async()=>{throw new Error("weather unavailable")};
-  await assert.rejects(loadReadyContext("2026-08-17",providers,demoWeatherLocation),/weather unavailable/);
+  const context=await loadReadyContext("2026-08-17",providers,demoWeatherLocation);
+  assert.equal(context.events[0].id,"arbitrary-provider-id");
+  assert.equal(context.weather.available,false);
+  assert.equal(buildRecommendations(context.events,context.tasks,context.weather,context.sleep).some(rec=>rec.sources.includes("Weather")),false);
 });
 
 test("mock weather provider returns normalized weather and location",async()=>{

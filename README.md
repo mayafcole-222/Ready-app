@@ -38,6 +38,14 @@ GOOGLE_CLIENT_SECRET=your-server-side-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/api/auth/google/callback
 ```
 
+For optional departure guidance, enable **Routes API** in the same or another billed Google Maps Platform project and add a server-only key:
+
+```bash
+GOOGLE_MAPS_API_KEY=your-restricted-server-side-routes-key
+```
+
+Restrict the key to the Routes API and to the server environments that run Ready. The key is used only by `/api/travel` and is never exposed through a `NEXT_PUBLIC_` variable. Without it, calendar, weather, and preparation continue working and the UI shows “Travel time unavailable.”
+
 The Google integration requests only `https://www.googleapis.com/auth/calendar.events.readonly` and reads the primary calendar. OAuth exchange, token refresh, and Google API requests run in server routes. Raw Google events are normalized into `CalendarEvent` facts before Ready's vendor-neutral enrichment layer classifies them. Live authorization or API failures never silently fall back to demo events.
 
 The local prototype stores its Google token session in an encrypted, authenticated, HttpOnly cookie. Tokens are unavailable to client JavaScript, but production should instead use encrypted server-side storage tied to an authenticated user, with key rotation and revocation controls. Both calendar and weather use the centralized New York demo timezone in `lib/ready-config.ts`.

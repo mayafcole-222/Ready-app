@@ -6,11 +6,16 @@ export type ReadyEventType = "work"|"presentation"|"exercise"|"social"|"home"|"u
 export interface ReadyEvent extends CalendarEvent { type:ReadyEventType; typeConfidence:number; typeReason:string; formality?:number; attendanceMode:"virtual"|"in_person"|"unknown" }
 export interface PreparationTask { id:string; title:string; reason:string }
 export type PreparationTaskState = Record<string,boolean>;
+export type TravelMode = "walking"|"driving"|"transit"|"cycling";
+export interface TravelSettings { homeLocation:string; mode:TravelMode; arrivalBufferMinutes:number }
+export interface TravelRequest { origin:string; destination:string; mode:TravelMode; arrivalAt?:string }
+export interface TravelContext { origin:string; destination:string; mode:TravelMode; durationMinutes:number; distance?:string }
+export interface TravelProvider { getTravelTime(request:TravelRequest):Promise<TravelContext> }
 export interface TodoistTask { id:string; title:string; dueToday:boolean; physicalItem?:string }
 export type WeatherConditionCode = "clear"|"partly-cloudy"|"cloudy"|"light-rain"|"rain"|"snow"|"storms";
 export interface WeatherLocation { name:string; latitude:number; longitude:number; timezone:string }
 export interface WeatherQuery { date:string; location:WeatherLocation }
-export interface WeatherContext { currentTemp:number; morningTemp:number; eveningTemp:number; highTemp:number; lowTemp:number; uvIndex:number; currentCondition:string; conditionCode:WeatherConditionCode; precipitationStart?:string; location:WeatherLocation }
+export interface WeatherContext { currentTemp:number; morningTemp:number; eveningTemp:number; highTemp:number; lowTemp:number; uvIndex:number; currentCondition:string; conditionCode:WeatherConditionCode; precipitationStart?:string; location:WeatherLocation; available?:boolean }
 export interface SleepContext { durationMinutes:number; baselineMinutes:number }
 export type ClosetCategory = "Tops"|"Bottoms"|"Outerwear"|"Shoes"|"Workout"|"Bags"|"Accessories";
 export interface ClosetItem { id:string; name:string; category:ClosetCategory; image:string; color:string; formality:number; warmth:number; weatherResistance:number; walkingComfort:number; activityTypes:string[]; clean:boolean; lastWorn:string }
