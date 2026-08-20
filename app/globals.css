@@ -64,3 +64,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:900px){.topbar,.evening .topbar{height:62px}.page{padding-top:32px}}
 @media(max-width:720px){.errand-suggestion{grid-template-columns:74px minmax(0,1fr)}.errand-suggestion .errand-actions{grid-column:2}.suggested-stop .errand-actions{grid-column:auto}.errand-actions button{min-height:44px}}
 @media(max-width:430px){.topbar,.evening .topbar{height:60px}.page{padding-top:28px}.suggested-stop .stop-card{padding:16px}.suggested-stop .errand-actions{gap:7px}}
+
+/* Final date and compact sidebar-weather alignment repair. */
+.review-header{display:grid;gap:4px;margin-bottom:14px}.review-header .eyebrow{margin:0}.review-header>p:last-child{margin:0;color:#c0bad4;font-size:12px;line-height:1.35}.side-card{grid-template-columns:max-content minmax(0,1fr);column-gap:10px;align-items:center}.side-card>span{min-width:42px;line-height:1;white-space:nowrap}.side-card>b{line-height:1.25}.side-card>small{grid-column:2;line-height:1.3}
+
+/* Ready Check success-state rhythm. */
+.check-page{--check-major-gap:clamp(24px,3vw,30px);--check-copy-gap:clamp(16px,2vw,20px)}.check-page .check-sun{margin-bottom:var(--check-major-gap)}.check-page>.eyebrow{margin:0 0 clamp(20px,2.4vw,26px)}.check-page>h1+p{max-width:480px;margin:var(--check-copy-gap) auto 0;line-height:1.6}.check-page>p+.primary{min-height:44px;margin-top:var(--check-major-gap)}
