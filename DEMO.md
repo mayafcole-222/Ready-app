@@ -17,7 +17,7 @@ The reset removes only Ready-owned browser keys. It does not clear unrelated bro
 2. Show the busy journey: Design Studio, Lunch with Jessica, Portfolio Review, Pilates, Walk the Dog, and Wind Down.
 3. Open People Prep for Jessica and show the job, TV finale, and portfolio-review context.
 4. Show where Ready placed **Mail package** around fixed commitments.
-5. Use the development-only Pilates cancellation control locally if demonstrating dynamic recomputation. Reset before recording another take.
+5. Select **Cancel Pilates** to demonstrate dynamic recomputation and Journey Changes. Reset before recording another take.
 
 ## Run locally
 
@@ -47,8 +47,17 @@ Then supply the existing server-only Google OAuth and optional Mapbox variables 
 npm run lint
 npm run test:engine
 npm run build
+npx vinext check
 git diff --check
 ```
+
+The public submission is hosted through the repository's Sites project (`.openai/hosting.json`). Save and publish the validated commit through Sites after pushing it to that project's source repository. For a separate directly managed Cloudflare Worker, Vinext reports `npx @vinext/cloudflare deploy` as its compatible deployment command; that path requires your own Wrangler authentication and is not the deployment used by the submission URL.
+
+## Prototype limitations
+
+- Demo mode uses deterministic mock calendar and weather providers; it does not display a reviewer's personal data.
+- Travel time stays unavailable until a starting location and a server-side routing credential are supplied. The core demo does not require either.
+- Demo progress is browser-local. Use the reset URL to restore the same starting state on another browser or device.
 
 ## Recovery
 
