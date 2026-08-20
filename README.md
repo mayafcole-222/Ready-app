@@ -14,6 +14,8 @@ npm run dev
 
 Build and validate with `npm run lint`, `npm run test:engine`, and `npm run build`.
 
+For the deterministic submission experience, reset the app from Settings or open `/?demo=1&reset=1`. See [DEMO.md](./DEMO.md) for the recording walkthrough, deployment mode, and recovery steps.
+
 ## Current features
 
 - Seven-step responsive onboarding with local persistence
@@ -29,9 +31,10 @@ Build and validate with `npm run lint`, `npm run test:engine`, and `npm run buil
 
 `lib/types.ts` defines product and provider contracts. `lib/providers.ts` selects a provider bundle, while `lib/weather/open-meteo.ts` adapts Open-Meteo into Ready's internal weather model. `lib/engine.ts` is the deterministic dependency engine. `lib/demo-data.ts` holds seeded context and closet items. `components/ready-app.tsx` contains the interactive prototype surfaces. Browser-local preferences and progress use `localStorage`.
 
-Tasks, sleep, and closet integrations remain mocked. Weather defaults to deterministic demo data; set `NEXT_PUBLIC_READY_WEATHER_MODE=live` in `.env.local` to use Open-Meteo, or set it to `mock` explicitly. Calendar also defaults to mock mode. To use the optional read-only Google Calendar provider, enable the Google Calendar API, create an OAuth web application, authorize `http://localhost:3000/api/auth/google/callback`, and configure:
+Tasks, sleep, and closet integrations remain mocked. The repository defaults to submission demo mode, which pins the morning clock and forces deterministic calendar and weather fixtures. Set `NEXT_PUBLIC_READY_RUNTIME_MODE=live` in `.env.local` to use the normal clock and enable optional live providers. Then set `NEXT_PUBLIC_READY_WEATHER_MODE=live` to use Open-Meteo. To use the optional read-only Google Calendar provider, enable the Google Calendar API, create an OAuth web application, authorize `http://localhost:3000/api/auth/google/callback`, and configure:
 
 ```bash
+NEXT_PUBLIC_READY_RUNTIME_MODE=live
 NEXT_PUBLIC_READY_CALENDAR_MODE=live
 GOOGLE_CLIENT_ID=your-server-side-client-id
 GOOGLE_CLIENT_SECRET=your-server-side-client-secret

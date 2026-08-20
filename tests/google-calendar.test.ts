@@ -52,7 +52,8 @@ test("client provider represents disconnected and reconnect states",async()=>{
 
 test("token session is encrypted and rejects tampering",async()=>{
   const session={status:"connected" as const,sessionId:"ready-session",accessToken:"access",refreshToken:"refresh",expiresAt:Date.now()+60_000},secret="test-only-secret";const sealed=await sealGoogleSession(session,secret);
-  assert.doesNotMatch(sealed,/access|refresh/);assert.deepEqual(await unsealGoogleSession(sealed,secret),session);assert.equal(await unsealGoogleSession(`${sealed.slice(0,-1)}x`,secret),null);
+  const tampered=`${sealed.startsWith("x")?"y":"x"}${sealed.slice(1)}`;
+  assert.doesNotMatch(sealed,/access|refresh/);assert.deepEqual(await unsealGoogleSession(sealed,secret),session);assert.equal(await unsealGoogleSession(tampered,secret),null);
 });
 
 test("expired sessions refresh server-side and refresh failures require reconnect",async()=>{

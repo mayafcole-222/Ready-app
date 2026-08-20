@@ -4,10 +4,11 @@ import type { CalendarEvent, ClosetItem, SleepContext, TodoistTask, WeatherConte
 function demoDateTime(date:string,time:string):string{const zoneName=new Intl.DateTimeFormat("en-US",{timeZone:demoWeatherLocation.timezone,timeZoneName:"longOffset"}).formatToParts(new Date(`${date}T12:00:00Z`)).find(part=>part.type==="timeZoneName")?.value;const offset=zoneName?.replace("GMT","")||"Z";return `${date}T${time}:00${offset}`}
 export function demoCalendarEvents(date:string):CalendarEvent[]{return [
   {id:"studio",title:"Design Studio",startAt:demoDateTime(date,"09:00"),endAt:demoDateTime(date,"12:00"),allDay:false,location:"West Hall",status:"confirmed"},
-  {id:"review",title:"Portfolio Review",startAt:demoDateTime(date,"13:00"),endAt:demoDateTime(date,"14:00"),allDay:false,location:"Design Center",status:"confirmed"},
+  {id:"lunch-jessica",title:"Lunch with Jessica",startAt:demoDateTime(date,"12:30"),endAt:demoDateTime(date,"13:30"),allDay:false,location:"Little Sister",status:"confirmed"},
+  {id:"review",title:"Portfolio Review",startAt:demoDateTime(date,"15:00"),endAt:demoDateTime(date,"16:00"),allDay:false,location:"Design Center",status:"confirmed"},
   {id:"pilates",title:"Pilates",startAt:demoDateTime(date,"17:30"),endAt:demoDateTime(date,"18:30"),allDay:false,location:"Form Studio",status:"confirmed"},
-  {id:"dinner",title:"Dinner",startAt:demoDateTime(date,"19:30"),endAt:demoDateTime(date,"21:30"),allDay:false,location:"June",status:"confirmed"},
-  {id:"home",title:"Home",startAt:demoDateTime(date,"22:00"),endAt:demoDateTime(date,"23:00"),allDay:false,location:"Home",status:"confirmed"},
+  {id:"evening",title:"Walk the Dog",startAt:demoDateTime(date,"19:30"),endAt:demoDateTime(date,"20:15"),allDay:false,location:"Neighborhood Loop",status:"confirmed"},
+  {id:"home",title:"Wind Down",startAt:demoDateTime(date,"21:30"),endAt:demoDateTime(date,"22:30"),allDay:false,location:"Home",status:"confirmed"},
 ]}
 export const events=enrichCalendarEvents(demoCalendarEvents("2026-08-16"));
 export const tasks:TodoistTask[]=[{id:"prototype",title:"Bring physical prototype",dueToday:true,physicalItem:"prototype"},{id:"library",title:"Return library book",dueToday:true,physicalItem:"library book"},{id:"detergent",title:"Buy detergent",dueToday:true}];
